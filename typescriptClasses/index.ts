@@ -75,8 +75,8 @@
 // emp2.name='Sam' //no error
 // emp.idNumber=5; // Error because cannot be changed as it is readonly property
 
-/*If once intialised in one method of class, any attempt to change it in another method
-of the class will be marked as error */
+// /*If once intialised in one method of class, any attempt to change it in another method
+// of the class will be marked as error */
 
 // class Person{
 //     readonly name:string;
@@ -103,27 +103,141 @@ of the class will be marked as error */
 // let teacher:Teacher=new Teacher();
 // teacher.sayHello();
 
-/* Interface defines the syntax for class to follow. A class follows a specific interface
-by using keyword 'implements' after the class name
-*/
+// /* Interface defines the syntax for class to follow. A class follows a specific interface
+// by using keyword 'implements' after the class name
+// */
 
-interface empInfo{
-    id:number;
-    name:string;
-    salary:number;
-}
+// interface empInfo{
+//     id:number;
+//     name:string;
+//     salary:number;
+// } //interface for class
 
-class employeeInformation implements empInfo{
-    id: number;
-    name:string;
-    salary:number;
+// class employeeInformation implements empInfo{ /*Class using the interface. Implementing interface
+// is purely a safety check and doesnt copy any interface members onto the class */
 
-    constructor(id:number,name:string,salary:number){
-        this.id=id;
+//     id: number; //class properties (not copied from the interface)
+//     name:string;
+//     salary:number;
+
+//     constructor(id:number,name:string,salary:number){ 
+//         this.id=id;
+//         this.name=name;
+//         this.salary=salary
+//         console.log(id,name,salary)
+//     }
+// }
+
+// let empinfo= new employeeInformation(1,'Khan',3000); //creating object of the class
+
+// Mulitple interface can also be used
+
+// interface Graded {
+//     grades:number[];
+// }
+// interface Reporter{
+//     report: ()=> string
+// }
+
+// class ReportCard implements Graded,Reporter{
+//     grades:number[];
+//     constructor(grades:number[]){
+//         this.grades=grades
+//         console.log(grades);
+//     }
+//     report(){
+//         return 'Result'
+//     }
+// }
+// let reportCard= new ReportCard([1,2,3]);
+// console.log(reportCard.report()
+// )
+
+// /*Inheritance is a method through which one class inherit properties and method from another
+// class and reuse it. Inheritance can be done using extend keyword*/
+
+// class parentClass{ 
+//     constructor(readonly firstName:string, readonly secondName:string){
+//         this.firstName=firstName;
+//         this.secondName=secondName;
+//     }
+//     describe():string{
+//         return `This is ${this.firstName} ${this.secondName}`
+//     }
+// }
+
+// class childClass extends parentClass{ //class which inherit properties is called child class 
+//  all properties and methods of parentClass has been inherited in this class
+// }
+
+// let childclass= new childClass('Maaz','Khan'); 
+// console.log(childclass.describe())/*despite of no code statement in the childClass, we are able
+// to print results.*/
+
+// class anotherChildClass extends parentClass{
+
+//     constructor(firstName:string,lastName:string,private jobTitle:string){/*Private class properties can
+//     only be accessed only by the class itself */
+
+//         console.log(`${firstName} ${lastName} ${jobTitle}`)
+//         super(firstName,lastName) //calls the constructor of the parentClass
+//     }
+// }
+
+// let anotherClass= new anotherChildClass('Maaz','Khan','Job title not yet decided')
+// console.log(anotherClass.describe());
+
+// /*Private class properties are only accessible within the class while public class properties are accessible by 
+// anyone anywhere*/
+
+// class userClass{
+//     private name:string; //cannot be accessible outside the class
+//     public email:string; //is accessible outside the class
+//     protected age:number=15; //allowed to be accessed only by the class itself and its subclasses
+
+//     constructor(name:string, email:string){
+//         this.name=name;
+//         this.email=email;
+//         console.log(`${name}\n${email}\n${this.age}`)
+//     }
+// }
+
+// class userClassChild extends userClass{
+//      all the properties would be accessed except the private properties
+//      age=25; //no error because accessible within the class and also its subclasses (child classes)
+// }
+// const user2= new userClass('maaz','maaz@emial.com')
+// console.log(user2);
+// console.log(user2.email) //ok, prints email
+// console.log(user2.name) //error because private property of class so not accessible outside the class
+// console.log(user2.age) //will also give error because not accessible outside the class
+
+// const user3= new userClassChild('maaz','maaz@emial.com')
+// console.log(user3);
+
+// /*Abstract classes are base classes from which other classes are derived. Object of an abstract class
+// cannot be created. It act likes interface. However, unlike an interface, an abstract class may contain
+// implementation for its members*/
+
+abstract class School{
+    
+    constructor(readonly name: string){
         this.name=name;
-        this.salary=salary
-        console.log(id,name,salary)
     }
+    getStudentTypes():string[]{ //a function implementation which is not possible in interface
+        return ['school']
+    }
+    abstract studentId():number[]; //this function can not be implemented here but to be in derived class
 }
 
-let empinfo= new employeeInformation(1,'Khan',3000);
+class PreSchool extends School{
+    studentId(){
+        return [1]
+    } //abstract function implemented here
+}
+
+
+let school= new School() //cannot be created because its an abstract class
+let preschool= new PreSchool('APS'); //object of derived class
+console.log(preschool)
+console.log(preschool.studentId())//abstract function can be accessed
